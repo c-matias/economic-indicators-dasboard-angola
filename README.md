@@ -196,7 +196,7 @@ Persistência em CSV (`data/processed/`) e SQLite (`data/angola_economics.db`).
 
 ## Autor
 
-**Clauder Matias** — Data Analyst & Engineer  
+**Clauder Matias** — Data Analyst & Software Engineer  
 [github.com/c-matias](https://github.com/c-matias) · 42 Luanda / ISPTEC
 
 ---
