@@ -3,7 +3,7 @@
 > Pipeline ETL completo + dashboard interactivo para indicadores macroeconómicos de Angola (2014–2024).
 > Construído com Python · Pandas · Plotly · Netlify.
 
-**🔗 Demo ao vivo:** [angola-dashboard.netlify.app](https://angola-dashboard.netlify.app)
+**🔗 Demo ao vivo:** [https://angola-ecomomic-dashboard.netlify.app/](https://angola-ecomomic-dashboard.netlify.app/)
 
 ---
 
