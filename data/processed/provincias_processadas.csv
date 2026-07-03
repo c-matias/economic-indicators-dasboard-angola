@@ -1,0 +1,19 @@
+province,population_2024,unemployment_pct,gdp_contribution_pct,poverty_rate_pct,literacy_rate_pct,electrification_pct,capital,indice_desenvolvimento,populacao_milhoes,indice_pib_per_capita,regiao
+Luanda,9283000,7.2,52.4,25.1,92.3,87.4,Luanda,85.36,9.283,5.645,Norte
+Huíla,2738000,14.8,5.8,61.3,68.2,22.1,Lubango,43.22,2.738,2.118,Sul
+Benguela,2455000,11.3,8.2,48.7,74.8,41.3,Benguela,56.02,2.455,3.34,Centro
+Huambo,2354000,15.2,4.1,63.8,71.4,19.8,Huambo,42.78,2.354,1.742,Centro
+Bié,1932000,16.9,2.8,69.2,64.7,14.2,Kuito,36.85,1.932,1.449,Centro
+Malanje,1038000,13.4,2.1,64.1,66.3,17.6,Malanje,40.14,1.038,2.023,Centro
+Cabinda,873000,8.9,11.3,38.4,81.2,58.7,Cabinda,67.44,0.873,12.944,Norte
+Uíge,1428000,15.8,1.9,67.4,63.1,13.4,Uíge,36.55,1.428,1.331,Norte
+Zaire,614000,12.7,1.4,56.8,69.4,24.8,M'banza-Kongo,45.93,0.614,2.28,Norte
+Cuanza Norte,486000,13.9,1.1,59.3,67.8,18.9,N'dalatando,42.55,0.486,2.263,Norte
+Cuanza Sul,1879000,14.1,2.4,58.7,69.1,21.3,Sumbe,44.03,1.879,1.277,Centro
+Namibe,648000,10.4,1.8,44.2,76.8,38.4,Moçâmedes,57.06,0.648,2.778,Sul
+Cunene,1232000,18.4,1.2,72.6,58.3,11.2,Ondjiva,32.54,1.232,0.974,Sul
+Lunda Norte,1074000,14.6,3.8,57.1,64.9,16.8,Dundo,41.46,1.074,3.538,Leste
+Lunda Sul,598000,13.8,2.9,55.6,66.2,18.4,Saurimo,42.93,0.598,4.849,Leste
+Cuando Cubango,628000,17.2,0.9,70.8,57.4,9.8,Menongue,32.28,0.628,1.433,Sul
+Moxico,832000,16.4,1.4,68.3,60.1,12.4,Luena,34.88,0.832,1.683,Leste
+Bengo,424000,11.8,2.3,52.4,72.3,31.6,Caxito,50.64,0.424,5.425,Norte

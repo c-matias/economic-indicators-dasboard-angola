@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Indicadores Económicos — Angola</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+:root{--v:#C41A1A;--vl:#F9EBEB;--o:#B8860A;--ol:#FDF6DC;--t:#0A7A68;--tl:#DFF2EE;--s:#1B2B3A;--sl:#EEF2F6;--mu:#7A8EA0;--bo:#D5E1EB;--bg:#F0F4F8;--w:#FFF;--tx:#1B2B3A;--tx2:#48606E}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--tx)}
+.hdr{background:var(--s);height:64px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:3px solid var(--v)}
+.hl{display:flex;align-items:center;gap:16px}
+.fl{display:flex;flex-direction:column;width:32px;border-radius:3px;overflow:hidden}
+.fl s{display:block;height:16px;text-decoration:none}
+.fl s:nth-child(1){background:var(--v)}.fl s:nth-child(2){background:#0d0d0d}
+.ht{font-family:'Playfair Display',serif;font-size:17px;color:#fff;font-weight:700}
+.hs{font-size:11px;color:#8CAABE;margin-top:2px}
+.hr{display:flex;gap:8px}
+.bf{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.17);color:#AABFCE;font-size:10.5px;padding:3px 10px;border-radius:20px}
+.nav{background:var(--w);border-bottom:1px solid var(--bo);display:flex;padding:0 28px;position:sticky;top:64px;z-index:100;overflow-x:auto}
+.tab{padding:13px 20px;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;user-select:none}
+.tab:hover{color:var(--s)}.tab.on{color:var(--v);border-bottom-color:var(--v)}
+.pg{display:none;padding:26px 28px 52px}.pg.on{display:block}
+.fi{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--w);border:1px solid var(--bo);border-radius:10px;padding:11px 18px;margin-bottom:22px}
+.fi label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mu)}
+.fi select{border:1px solid var(--bo);border-radius:6px;padding:5px 9px;font-size:13px;color:var(--tx);background:#fff;outline:none;cursor:pointer}
+.fi select:focus{border-color:var(--t)}
+.fs{width:1px;height:20px;background:var(--bo)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin-bottom:22px}
+.k{background:var(--w);border:1px solid var(--bo);border-radius:12px;padding:16px 18px;border-top:4px solid transparent;position:relative;overflow:hidden}
+.k::after{content:'';position:absolute;right:-16px;top:-16px;width:72px;height:72px;border-radius:50%;background:currentColor;opacity:.04}
+.k.v{border-top-color:var(--v);color:var(--v)}.k.o{border-top-color:var(--o);color:var(--o)}
+.k.t{border-top-color:var(--t);color:var(--t)}.k.s{border-top-color:var(--s);color:var(--s)}
+.kr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mu)}
+.kv{font-size:28px;font-weight:600;color:var(--tx);margin:6px 0 4px;line-height:1}
+.ks{font-size:11.5px}
+.po{color:#15803D}.ne{color:var(--v)}.nu{color:var(--mu)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.gf{margin-bottom:16px}
+@media(max-width:860px){.g2{grid-template-columns:1fr}}
+.p{background:var(--w);border:1px solid var(--bo);border-radius:12px;padding:18px 20px;overflow:hidden}
+.pt{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.ps{font-size:11px;color:var(--mu);margin-bottom:14px;line-height:1.4}
+.p canvas{display:block;width:100%!important}
+.lp{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.ep{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.tp{width:100%;border-collapse:collapse;font-size:12.5px}
+.tp th{text-align:left;padding:8px 11px;font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid var(--bo);background:var(--sl)}
+.tp td{padding:8px 11px;border-bottom:1px solid var(--bo)}
+.tp tr:hover td{background:#F5F8FB}
+.dw{display:flex;align-items:center;gap:7px}
+.db{height:7px;border-radius:4px;background:var(--t)}
+.rg{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.rn{background:#EEF6FF;color:#1D5FA6}.rc{background:#F0F4FF;color:#3D52A0}
+.rs{background:var(--vl);color:var(--v)}.rl{background:var(--ol);color:var(--o)}
+.tc{width:100%;border-collapse:collapse;font-size:11.5px}
+.tc th{padding:7px 5px;text-align:center;font-size:10px;font-weight:700;color:var(--mu);border-bottom:1px solid var(--bo)}
+.tc th:first-child{text-align:left;min-width:110px}
+.tc td{padding:6px 5px;text-align:center;font-weight:500;border-bottom:1px solid var(--bo)}
+.tc td:first-child{text-align:left;font-weight:600;font-size:11px;color:var(--tx2)}
+.ppl{display:flex;align-items:stretch;gap:0;background:var(--w);border:1px solid var(--bo);border-radius:12px;padding:20px 22px;margin-bottom:16px;overflow-x:auto}
+.pp{flex:1;min-width:138px;text-align:center;padding:16px 12px;border-radius:10px}
+.pe{background:var(--sl);border:1px solid #C8D5E2}.ptr{background:var(--tl);border:1px solid #9ED5CB}
+.pl{background:var(--ol);border:1px solid #DDCA70}.pv{background:var(--vl);border:1px solid #F0B8B8}
+.pi{font-size:22px;margin-bottom:7px}.pn{font-size:12.5px;font-weight:700;color:var(--s)}
+.pd{font-size:11px;color:var(--mu);margin-top:5px;line-height:1.55}
+.ar{font-size:20px;color:#C0CDD8;padding:0 7px;display:flex;align-items:center;flex-shrink:0}
+.sc{overflow-x:auto}
+.st{font-family:'Playfair Display',serif;font-size:15.5px;font-weight:700;color:var(--s);margin-bottom:14px;padding-bottom:9px;border-bottom:2px solid var(--bo);display:flex;align-items:center;gap:10px}
+.st span{font-size:11px;font-weight:400;color:var(--mu);font-family:'Source Sans 3',sans-serif}
+.tgs{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.tg{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600}
+footer{text-align:center;font-size:11px;color:var(--mu);padding:22px 28px 30px;border-top:1px solid var(--bo)}
+code{font-family:monospace;font-size:.92em}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hl">
+    <div class="fl"><s></s><s></s></div>
+    <div>
+      <div class="ht">Dashboard de Indicadores Económicos — Angola</div>
+      <div class="hs">Fontes: INE Angola · BNA &nbsp;|&nbsp; Pipeline ETL: Python · Pandas · Plotly &nbsp;|&nbsp; 2014–2024</div>
+    </div>
+  </div>
+  <div class="hr">
+    <span class="bf">INE</span><span class="bf">BNA</span><span class="bf">Q4 2024</span>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="tab on"  data-pg="geral">Visão Geral</div>
+  <div class="tab"     data-pg="inflacao">Inflação e Câmbio</div>
+  <div class="tab"     data-pg="trabalho">Mercado de Trabalho</div>
+  <div class="tab"     data-pg="provincias">Análise Provincial</div>
+  <div class="tab"     data-pg="pipeline">Pipeline de Dados</div>
+  <a href="visuals/index.html" style="padding:13px 20px;font-size:13px;font-weight:500;color:var(--mu);white-space:nowrap;text-decoration:none;border-bottom:3px solid transparent;display:flex;align-items:center;gap:6px" onmouseover="this.style.color='var(--s)'" onmouseout="this.style.color='var(--mu)'">📈 Charts Plotly ↗</a>
+</nav>
+
+<!-- PG 1 VISÃO GERAL -->
+<section class="pg on" id="pg-geral">
+  <div class="fi">
+    <label>Ano</label>
+    <select id="f-ano">
+      <option>2014</option><option>2015</option><option>2016</option><option>2017</option>
+      <option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+      <option>2022</option><option>2023</option><option selected>2024</option>
+    </select>
+    <div class="fs"></div>
+    <label>Trimestre</label>
+    <select id="f-trim"><option value="t">Todos</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select>
+    <div class="fs"></div>
+    <span style="font-size:11.5px;color:var(--mu)">INE / BNA Angola</span>
+  </div>
+  <div class="kpis">
+    <div class="k t"><div class="kr">PIB (USD Bi)</div>    <div class="kv">121,4</div><div class="ks po">▲ crescimento +4,1%</div></div>
+    <div class="k v"><div class="kr">Inflação</div>         <div class="kv">28,3%</div><div class="ks ne">▲ pressão cambial</div></div>
+    <div class="k o"><div class="kr">AOA / USD</div>        <div class="kv">961</div>  <div class="ks ne">▼ depreciação contínua</div></div>
+    <div class="k s"><div class="kr">Desemprego</div>       <div class="kv">7,6%</div> <div class="ks po">▼ mínimo em 10 anos</div></div>
+    <div class="k s"><div class="kr">Taxa de Juro BNA</div> <div class="kv">19,5%</div><div class="ks nu">— estável</div></div>
+    <div class="k t"><div class="kr">Juro Real</div>        <div class="kv">−8,8%</div><div class="ks ne">▼ poupança penalizada</div></div>
+  </div>
+  <div class="gf p">
+    <div class="pt">PIB e Taxa de Crescimento (2014–2024)</div>
+    <div class="ps">Barras = PIB médio anual em USD Bi · Linha = crescimento YoY (%) · Eixo duplo</div>
+    <div style="height:272px;position:relative"><canvas id="c-pib"></canvas></div>
+  </div>
+  <div class="g2">
+    <div class="p">
+      <div class="pt">Inflação vs Taxa de Juro (%)</div>
+      <div class="ps">Médias anuais — custo de vida vs custo do crédito</div>
+      <div style="height:236px;position:relative"><canvas id="c-inf-juro"></canvas></div>
+    </div>
+    <div class="p">
+      <div class="pt">Taxa de Câmbio AOA/USD</div>
+      <div class="ps">Kwanza por 1 Dólar Americano — série trimestral completa</div>
+      <div style="height:236px;position:relative"><canvas id="c-cambio-g"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- PG 2 INFLAÇÃO E CÂMBIO -->
+<section class="pg" id="pg-inflacao">
+  <div class="fi">
+    <label>Indicador</label>
+    <select id="f-ind"><option value="inf">Inflação (%)</option><option value="fx">Câmbio AOA/USD</option><option value="ir">Taxa de Juro (%)</option></select>
+    <div class="fs"></div>
+    <label>Granularidade</label>
+    <select id="f-gran"><option value="trim">Trimestral</option><option value="anual">Anual</option></select>
+  </div>
+  <div class="kpis">
+    <div class="k v"><div class="kr">Pico de inflação</div>    <div class="kv">41,9%</div><div class="ks nu">Q4 2016 — crise petrolífera</div></div>
+    <div class="k t"><div class="kr">Mínimo de inflação</div>  <div class="kv">7,3%</div> <div class="ks nu">Q1 2014 — pré-crise</div></div>
+    <div class="k o"><div class="kr">AOA máximo</div>          <div class="kv">961</div>  <div class="ks nu">Q4 2024</div></div>
+    <div class="k s"><div class="kr">Desvalorização total</div><div class="kv">885%</div> <div class="ks ne">desde Q1 2014</div></div>
+  </div>
+  <div class="gf p">
+    <div class="pt">Série Histórica da Taxa de Inflação (2014–2024)</div>
+    <div class="ps">Linha principal + Moving Average de 4 trimestres (MA4)</div>
+    <div class="lp">
+      <span class="ep" style="background:#E8F5E9;color:#1B5E20">Pré-crise</span>
+      <span class="ep" style="background:#FFEBEE;color:#B71C1C">Crise 2015–17</span>
+      <span class="ep" style="background:#E3F2FD;color:#0D47A1">Recuperação Lourenço</span>
+      <span class="ep" style="background:#FFF3E0;color:#E65100">Impacto COVID-19</span>
+      <span class="ep" style="background:#F3E5F5;color:#4A148C">Estabilização</span>
+    </div>
+    <div style="height:292px;position:relative"><canvas id="c-inf-h"></canvas></div>
+  </div>
+  <div class="g2">
+    <div class="p">
+      <div class="pt">Dispersão: Inflação × Taxa de Câmbio (Pearson r = 0,26)</div>
+      <div class="ps">Cada ponto = 1 trimestre · Cor por período económico</div>
+      <div style="height:262px;position:relative"><canvas id="c-sc"></canvas></div>
+    </div>
+    <div class="p">
+      <div class="pt">Correlation Matrix — Indicadores Macroeconómicos</div>
+      <div class="ps">Coeficiente de Pearson · 6 indicadores · 2014–2024</div>
+      <div class="sc" style="margin-top:6px"><table class="tc" id="t-corr"></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- PG 3 MERCADO DE TRABALHO -->
+<section class="pg" id="pg-trabalho">
+  <div class="fi">
+    <label>Comparar desemprego com</label>
+    <select id="f-comp">
+      <option value="inf">Inflação (%)</option>
+      <option value="gr">Crescimento do PIB (%)</option>
+      <option value="ir">Taxa de Juro (%)</option>
+    </select>
+  </div>
+  <div class="kpis">
+    <div class="k s"><div class="kr">Desemprego 2024</div>  <div class="kv">7,6%</div> <div class="ks po">▼ vs 12,1% no pico (2020)</div></div>
+    <div class="k t"><div class="kr">Mínimo histórico</div> <div class="kv">6,2%</div> <div class="ks nu">Q1 2014</div></div>
+    <div class="k v"><div class="kr">Máximo histórico</div> <div class="kv">12,1%</div><div class="ks nu">Q2 2020 — impacto COVID-19</div></div>
+    <div class="k o"><div class="kr">Juro real 2024</div>   <div class="kv">−8,8%</div><div class="ks ne">▼ poupança destruída</div></div>
+  </div>
+  <div class="gf p">
+    <div class="pt">Taxa de Desemprego vs Indicador Seleccionado (2014–2024)</div>
+    <div class="ps">Série anual comparativa com eixo duplo — alterar indicador no filtro acima</div>
+    <div style="height:288px;position:relative"><canvas id="c-trab"></canvas></div>
+  </div>
+  <div class="g2">
+    <div class="p">
+      <div class="pt">Taxa de Juro Real (nominal − inflação)</div>
+      <div class="ps">Barras vermelhas = poupança destruída · Barras verdes = retorno positivo</div>
+      <div style="height:232px;position:relative"><canvas id="c-jr"></canvas></div>
+    </div>
+    <div class="p">
+      <div class="pt">Composição do PIB: Petrolífero vs Não-Petrolífero</div>
+      <div class="ps">Percentagem do PIB — grau de dependência da renda petrolífera</div>
+      <div style="height:232px;position:relative"><canvas id="c-pc"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- PG 4 ANÁLISE PROVINCIAL -->
+<section class="pg" id="pg-provincias">
+  <div class="fi">
+    <label>Ordenar por</label>
+    <select id="f-ord">
+      <option value="dev">Índice de Desenvolvimento</option>
+      <option value="un">Desemprego</option>
+      <option value="pov">Taxa de Pobreza</option>
+      <option value="gdp">Contribuição PIB (%)</option>
+      <option value="pop">População</option>
+    </select>
+    <div class="fs"></div>
+    <label>Região</label>
+    <select id="f-reg">
+      <option value="t">Todas as regiões</option>
+      <option value="Norte">Norte</option><option value="Centro">Centro</option>
+      <option value="Sul">Sul</option><option value="Leste">Leste</option>
+    </select>
+  </div>
+  <div class="g2">
+    <div class="p">
+      <div class="pt">Índice de Desenvolvimento por Província</div>
+      <div class="ps">Proxy IDH: Literacia 35% · Electrificação 35% · (100 − Pobreza) 30%</div>
+      <div style="height:428px;position:relative"><canvas id="c-dev"></canvas></div>
+    </div>
+    <div class="p">
+      <div class="pt">Desemprego vs Literacia — Bubble Chart por Região</div>
+      <div class="ps">Dimensão da bolha = população (M) · Cor = região geográfica</div>
+      <div style="height:428px;position:relative"><canvas id="c-bb"></canvas></div>
+    </div>
+  </div>
+  <div class="p gf">
+    <div class="pt">Tabela Detalhada — 18 Províncias de Angola</div>
+    <div class="ps">Ordenar através do selector acima · Filtrar por região</div>
+    <div class="sc" style="margin-top:11px"><table class="tp" id="t-prov"></table></div>
+  </div>
+</section>
+
+<!-- PG 5 PIPELINE DE DADOS -->
+<section class="pg" id="pg-pipeline">
+  <div class="st">Arquitectura do Pipeline ETL <span>Python · Pandas · Plotly · Power BI</span></div>
+  <div class="ppl">
+    <div class="pp pe"><div class="pi">📥</div><div class="pn">Extract</div><div class="pd">Leitura de CSV / Excel / API<br>Fontes: INE · BNA<br><code>extract.py</code></div></div>
+    <div class="ar">→</div>
+    <div class="pp ptr"><div class="pi">⚙️</div><div class="pn">Transform</div><div class="pd">Limpeza · Normalização<br>Feature Engineering · MA4<br><code>transform.py</code></div></div>
+    <div class="ar">→</div>
+    <div class="pp pl"><div class="pi">💾</div><div class="pn">Load</div><div class="pd">CSV processado<br>SQLite / PostgreSQL<br><code>load.py</code></div></div>
+    <div class="ar">→</div>
+    <div class="pp pv"><div class="pi">📊</div><div class="pn">Visualize</div><div class="pd">Charts Plotly HTML<br>Dashboard Power BI<br><code>visualize.py</code></div></div>
+  </div>
+  <div class="g2">
+    <div class="p">
+      <div class="pt">Stack Tecnológico</div>
+      <div class="ps">Ferramentas por camada do pipeline</div>
+      <div class="tgs">
+        <span class="tg" style="background:#EEF2FF;color:#3730A3">Python 3.11</span>
+        <span class="tg" style="background:#E0F2FE;color:#075985">Pandas</span>
+        <span class="tg" style="background:#F0FDF4;color:#166534">NumPy</span>
+        <span class="tg" style="background:#FFF7ED;color:#9A3412">Plotly</span>
+        <span class="tg" style="background:#FDF4FF;color:#7E22CE">Power BI</span>
+        <span class="tg" style="background:#FFF1F2;color:#9F1239">SQLite</span>
+        <span class="tg" style="background:#F0FDF4;color:#14532D">Git</span>
+        <span class="tg" style="background:#FFFBEB;color:#92400E">SciPy</span>
+        <span class="tg" style="background:#EFF6FF;color:#1E40AF">StatsModels</span>
+      </div>
+      <div style="margin-top:20px">
+        <div class="pt" style="margin-bottom:9px">Ficheiros Produzidos</div>
+        <table style="width:100%;font-size:12.5px;border-collapse:collapse">
+          <tr style="border-bottom:1px solid var(--bo)"><td style="padding:6px 8px;color:var(--tx2)"><code>macro_processado.csv</code></td><td style="padding:6px 8px;color:var(--mu);text-align:right">44 reg. · 23 colunas</td></tr>
+          <tr style="border-bottom:1px solid var(--bo)"><td style="padding:6px 8px;color:var(--tx2)"><code>provincias_processadas.csv</code></td><td style="padding:6px 8px;color:var(--mu);text-align:right">18 reg. · 12 colunas</td></tr>
+          <tr style="border-bottom:1px solid var(--bo)"><td style="padding:6px 8px;color:var(--tx2)"><code>agregados_anuais.csv</code></td><td style="padding:6px 8px;color:var(--mu);text-align:right">11 reg. · 8 colunas</td></tr>
+          <tr style="border-bottom:1px solid var(--bo)"><td style="padding:6px 8px;color:var(--tx2)"><code>correlation_matrix.csv</code></td><td style="padding:6px 8px;color:var(--mu);text-align:right">Pearson 6×6</td></tr>
+          <tr><td style="padding:6px 8px;color:var(--tx2)"><code>angola_economics.db</code></td><td style="padding:6px 8px;color:var(--mu);text-align:right">SQLite · 3 tabelas</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="p">
+      <div class="pt">Transformações — <code>transform.py</code></div>
+      <div class="ps">Feature engineering na Stage 2 do pipeline</div>
+      <div style="display:flex;flex-direction:column;gap:11px;margin-top:10px">
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:var(--tl);color:var(--t);font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">DATAS</span><span style="font-size:12.5px;color:var(--tx2)">Parsing de <code>year</code>+<code>quarter</code> para <code>datetime</code> · ordenação cronológica</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:var(--vl);color:var(--v);font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">NULOS</span><span style="font-size:12.5px;color:var(--tx2)">Forward-fill seguido de back-fill em todas as colunas numéricas</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:var(--ol);color:var(--o);font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">MA4</span><span style="font-size:12.5px;color:var(--tx2)">Moving averages de 4 trimestres para inflação, câmbio e crescimento PIB</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#EEF2FF;color:#3730A3;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">DERIVADAS</span><span style="font-size:12.5px;color:var(--tx2)">Variação QoQ do PIB e câmbio · Taxa de juro real (nominal − inflação)</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#F0FDF4;color:#166534;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">MIN-MAX</span><span style="font-size:12.5px;color:var(--tx2)">Normalização min-max [0,1] para análise de correlação comparativa</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#FFF1F2;color:#9F1239;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">IDH</span><span style="font-size:12.5px;color:var(--tx2)">Índice provincial: Literacia×0,35 + Electrificação×0,35 + (100−Pobreza)×0,30</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#EEF6FF;color:#1D5FA6;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">PEARSON</span><span style="font-size:12.5px;color:var(--tx2)">Correlation matrix entre os 6 indicadores macroeconómicos</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#F3F4F6;color:#374151;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;margin-top:2px">PERÍODOS</span><span style="font-size:12.5px;color:var(--tx2)">Labels de regime económico: Pré-crise · Crise · Recuperação · COVID · Estabilização</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="p">
+    <div class="pt">Estrutura do Repositório Git</div>
+    <div class="ps">Organização do projecto para portfólio</div>
+    <pre style="font-size:11.5px;line-height:1.9;color:var(--tx2);margin-top:11px;background:var(--sl);padding:16px;border-radius:8px;overflow-x:auto">angola-dashboard/
+├── data/
+│   ├── raw/
+│   │   ├── macro_angola.csv                ← Dados macro INE/BNA (2014–2024)
+│   │   └── provinces_angola.csv            ← 18 províncias
+│   ├── processed/
+│   │   ├── macro_processado.csv            ← 44 registos · 23 features
+│   │   ├── provincias_processadas.csv      ← 18 províncias · 12 colunas
+│   │   ├── agregados_anuais.csv            ← Médias anuais para Power BI
+│   │   ├── correlation_matrix.csv          ← Pearson 6×6
+│   │   └── summary_stats.csv               ← Estatísticas descritivas + CV%
+│   └── angola_economics.db                 ← SQLite · 3 tabelas
+├── scripts/
+│   ├── extract.py                          ← Stage 1: extracção
+│   ├── transform.py                        ← Stage 2: limpeza + feature engineering
+│   └── load.py                             ← Stage 3: persistência CSV + SQLite
+├── visuals/                                ← 8 charts Plotly HTML interactivos
+├── notebooks/                              ← Análise exploratória (EDA)
+├── geo/                                    ← GeoJSON das províncias de Angola
+├── powerbi/                                ← Dashboard .pbix
+├── visualize.py                            ← Motor de charts Plotly
+├── main.py                                 ← Orquestrador do pipeline
+├── requirements.txt
+└── README.md</pre>
+  </div>
+</section>
+
+<footer>Dashboard de Indicadores Económicos — Angola &nbsp;·&nbsp; Dados baseados em publicações do INE Angola e BNA &nbsp;·&nbsp; Pipeline: Python · Pandas · Plotly · Power BI &nbsp;·&nbsp; 2014–2024</footer>
+
+<script>
+const M=[
+  {y:2014,q:"Q1",pib:131.4,gr:4.8,  inf:7.3, fx:97.6, un:6.2, ir:9.5, oil:45.3},
+  {y:2014,q:"Q2",pib:133.2,gr:4.5,  inf:7.8, fx:98.1, un:6.3, ir:9.5, oil:45.1},
+  {y:2014,q:"Q3",pib:134.8,gr:4.2,  inf:8.1, fx:98.5, un:6.4, ir:9.5, oil:44.9},
+  {y:2014,q:"Q4",pib:136.1,gr:3.9,  inf:8.5, fx:102.0,un:6.5, ir:9.5, oil:44.7},
+  {y:2015,q:"Q1",pib:108.2,gr:-5.2, inf:9.2, fx:109.8,un:7.1, ir:11.0,oil:41.2},
+  {y:2015,q:"Q2",pib:98.4, gr:-7.8, inf:10.3,fx:116.5,un:7.4, ir:11.5,oil:40.8},
+  {y:2015,q:"Q3",pib:92.1, gr:-9.1, inf:12.8,fx:121.4,un:7.8, ir:12.0,oil:40.1},
+  {y:2015,q:"Q4",pib:89.3, gr:-10.2,inf:14.3,fx:135.3,un:8.1, ir:12.0,oil:39.5},
+  {y:2016,q:"Q1",pib:84.1, gr:-11.4,inf:28.3,fx:155.2,un:9.2, ir:14.0,oil:37.8},
+  {y:2016,q:"Q2",pib:79.8, gr:-12.3,inf:32.4,fx:163.7,un:9.8, ir:16.0,oil:37.1},
+  {y:2016,q:"Q3",pib:76.2, gr:-13.1,inf:35.6,fx:170.1,un:10.3,ir:16.0,oil:36.4},
+  {y:2016,q:"Q4",pib:72.9, gr:-14.2,inf:41.9,fx:185.1,un:10.9,ir:16.0,oil:35.8},
+  {y:2017,q:"Q1",pib:71.4, gr:-2.6, inf:30.4,fx:166.5,un:10.6,ir:16.0,oil:35.1},
+  {y:2017,q:"Q2",pib:72.8, gr:-1.8, inf:27.1,fx:170.3,un:10.4,ir:15.5,oil:34.9},
+  {y:2017,q:"Q3",pib:74.1, gr:-1.2, inf:25.8,fx:173.1,un:10.2,ir:15.5,oil:34.6},
+  {y:2017,q:"Q4",pib:75.6, gr:-0.9, inf:23.6,fx:165.9,un:10.1,ir:15.0,oil:34.3},
+  {y:2018,q:"Q1",pib:77.3, gr:2.4,  inf:20.3,fx:211.4,un:9.8, ir:15.5,oil:34.8},
+  {y:2018,q:"Q2",pib:79.8, gr:3.1,  inf:19.7,fx:243.7,un:9.5, ir:15.5,oil:35.2},
+  {y:2018,q:"Q3",pib:82.1, gr:3.8,  inf:18.9,fx:255.8,un:9.3, ir:16.0,oil:35.6},
+  {y:2018,q:"Q4",pib:84.2, gr:4.1,  inf:20.3,fx:308.7,un:9.1, ir:16.5,oil:36.1},
+  {y:2019,q:"Q1",pib:85.1, gr:1.2,  inf:18.6,fx:316.4,un:9.3, ir:15.75,oil:35.8},
+  {y:2019,q:"Q2",pib:86.3, gr:1.6,  inf:17.4,fx:322.1,un:9.5, ir:15.5,oil:35.5},
+  {y:2019,q:"Q3",pib:87.8, gr:2.1,  inf:16.9,fx:334.8,un:9.7, ir:15.5,oil:35.2},
+  {y:2019,q:"Q4",pib:88.9, gr:2.4,  inf:16.9,fx:364.8,un:9.9, ir:15.5,oil:34.9},
+  {y:2020,q:"Q1",pib:71.2, gr:-5.4, inf:22.3,fx:540.1,un:10.8,ir:15.5,oil:31.2},
+  {y:2020,q:"Q2",pib:62.4, gr:-10.2,inf:25.8,fx:578.3,un:12.1,ir:15.5,oil:29.8},
+  {y:2020,q:"Q3",pib:65.8, gr:-7.8, inf:24.1,fx:596.4,un:11.6,ir:15.5,oil:30.4},
+  {y:2020,q:"Q4",pib:68.2, gr:-5.1, inf:24.9,fx:621.8,un:11.2,ir:15.5,oil:31.1},
+  {y:2021,q:"Q1",pib:70.4, gr:1.4,  inf:26.8,fx:642.9,un:10.9,ir:15.5,oil:32.1},
+  {y:2021,q:"Q2",pib:73.6, gr:2.8,  inf:24.9,fx:651.3,un:10.6,ir:20.0,oil:33.4},
+  {y:2021,q:"Q3",pib:76.9, gr:3.2,  inf:23.1,fx:668.7,un:10.3,ir:20.0,oil:34.2},
+  {y:2021,q:"Q4",pib:80.1, gr:4.1,  inf:27.0,fx:683.4,un:10.1,ir:20.0,oil:35.1},
+  {y:2022,q:"Q1",pib:89.4, gr:5.8,  inf:28.7,fx:437.2,un:9.8, ir:20.0,oil:36.8},
+  {y:2022,q:"Q2",pib:94.8, gr:6.4,  inf:27.8,fx:419.5,un:9.4, ir:20.0,oil:37.4},
+  {y:2022,q:"Q3",pib:98.2, gr:6.1,  inf:26.9,fx:434.8,un:9.1, ir:17.0,oil:38.1},
+  {y:2022,q:"Q4",pib:104.1,gr:7.3,  inf:13.9,fx:456.2,un:8.8, ir:17.0,oil:39.2},
+  {y:2023,q:"Q1",pib:105.3,gr:3.4,  inf:11.9,fx:506.3,un:8.6, ir:17.0,oil:38.9},
+  {y:2023,q:"Q2",pib:107.8,gr:3.8,  inf:13.1,fx:534.7,un:8.4, ir:18.0,oil:38.5},
+  {y:2023,q:"Q3",pib:110.4,gr:4.1,  inf:15.7,fx:821.4,un:8.2, ir:18.0,oil:38.1},
+  {y:2023,q:"Q4",pib:112.9,gr:4.6,  inf:20.0,fx:854.3,un:8.0, ir:18.0,oil:37.8},
+  {y:2024,q:"Q1",pib:114.2,gr:2.8,  inf:23.7,fx:892.1,un:8.1, ir:19.5,oil:37.4},
+  {y:2024,q:"Q2",pib:116.8,gr:3.2,  inf:25.1,fx:921.4,un:7.9, ir:19.5,oil:37.1},
+  {y:2024,q:"Q3",pib:118.9,gr:3.6,  inf:26.8,fx:948.7,un:7.8, ir:19.5,oil:36.8},
+  {y:2024,q:"Q4",pib:121.4,gr:4.1,  inf:28.3,fx:961.2,un:7.6, ir:19.5,oil:36.5},
+];
+const P=[
+  {prov:"Luanda",        un:7.2, dev:85.36,pop:9.283,gdp:52.4,pov:25.1,lit:92.3,elec:87.4,reg:"Norte"},
+  {prov:"Huíla",         un:14.8,dev:43.22,pop:2.738,gdp:5.8, pov:61.3,lit:68.2,elec:22.1,reg:"Sul"},
+  {prov:"Benguela",      un:11.3,dev:56.02,pop:2.455,gdp:8.2, pov:48.7,lit:74.8,elec:41.3,reg:"Centro"},
+  {prov:"Huambo",        un:15.2,dev:42.78,pop:2.354,gdp:4.1, pov:63.8,lit:71.4,elec:19.8,reg:"Centro"},
+  {prov:"Bié",           un:16.9,dev:36.85,pop:1.932,gdp:2.8, pov:69.2,lit:64.7,elec:14.2,reg:"Centro"},
+  {prov:"Malanje",       un:13.4,dev:40.14,pop:1.038,gdp:2.1, pov:64.1,lit:66.3,elec:17.6,reg:"Centro"},
+  {prov:"Cabinda",       un:8.9, dev:67.44,pop:0.873,gdp:11.3,pov:38.4,lit:81.2,elec:58.7,reg:"Norte"},
+  {prov:"Uíge",          un:15.8,dev:36.55,pop:1.428,gdp:1.9, pov:67.4,lit:63.1,elec:13.4,reg:"Norte"},
+  {prov:"Zaire",         un:12.7,dev:45.93,pop:0.614,gdp:1.4, pov:56.8,lit:69.4,elec:24.8,reg:"Norte"},
+  {prov:"Cuanza Norte",  un:13.9,dev:42.55,pop:0.486,gdp:1.1, pov:59.3,lit:67.8,elec:18.9,reg:"Norte"},
+  {prov:"Cuanza Sul",    un:14.1,dev:44.03,pop:1.879,gdp:2.4, pov:58.7,lit:69.1,elec:21.3,reg:"Centro"},
+  {prov:"Namibe",        un:10.4,dev:57.06,pop:0.648,gdp:1.8, pov:44.2,lit:76.8,elec:38.4,reg:"Sul"},
+  {prov:"Cunene",        un:18.4,dev:32.54,pop:1.232,gdp:1.2, pov:72.6,lit:58.3,elec:11.2,reg:"Sul"},
+  {prov:"Lunda Norte",   un:14.6,dev:41.46,pop:1.074,gdp:3.8, pov:57.1,lit:64.9,elec:16.8,reg:"Leste"},
+  {prov:"Lunda Sul",     un:13.8,dev:42.93,pop:0.598,gdp:2.9, pov:55.6,lit:66.2,elec:18.4,reg:"Leste"},
+  {prov:"Cuando Cubango",un:17.2,dev:32.28,pop:0.628,gdp:0.9, pov:70.8,lit:57.4,elec:9.8, reg:"Sul"},
+  {prov:"Moxico",        un:16.4,dev:34.88,pop:0.832,gdp:1.4, pov:68.3,lit:60.1,elec:12.4,reg:"Leste"},
+  {prov:"Bengo",         un:11.8,dev:50.64,pop:0.424,gdp:2.3, pov:52.4,lit:72.3,elec:31.6,reg:"Norte"},
+];
+const CR={rot:["Cresc. PIB","Inflação","Câmbio AOA","Taxa Juro","Desemprego","Rec. Petrol."],v:[[1.000,-0.349,0.357,0.296,-0.350,0.233],[-0.349,1.000,0.255,0.598,0.684,-0.630],[0.357,0.255,1.000,0.748,0.124,-0.388],[0.296,0.598,0.748,1.000,0.439,-0.561],[-0.350,0.684,0.124,0.439,1.000,-0.919],[0.233,-0.630,-0.388,-0.561,-0.919,1.000]]};
+
+const anos=[...new Set(M.map(d=>d.y))];
+const med=(a,k)=>a.reduce((s,d)=>s+d[k],0)/a.length;
+const pA=k=>anos.map(a=>+med(M.filter(d=>d.y===a),k).toFixed(2));
+const ma4=a=>a.map((_,i)=>+(a.slice(Math.max(0,i-3),i+1).reduce((s,v)=>s+v,0)/Math.min(i+1,4)).toFixed(2));
+const Cv='#C41A1A',Co='#B8860A',Ct='#0A7A68',Cs='#1B2B3A';
+const CvA='rgba(196,26,26,.10)',CoA='rgba(184,134,10,.13)',CtA='rgba(10,122,104,.11)',CsA='rgba(27,43,58,.09)';
+const GR={color:'#ECF0F4',lineWidth:.8},TK={color:'#7A8EA0',font:{size:11}};
+const inst={};
+function ch(id,cfg){if(inst[id])inst[id].destroy();const c=document.getElementById(id);if(c)inst[id]=new Chart(c,cfg);}
+
+function pgGeral(){
+  const pA2=pA('pib'),gA=pA('gr');
+  ch('c-pib',{data:{labels:anos,datasets:[{type:'bar',label:'PIB',data:pA2,backgroundColor:CtA,borderColor:Ct,borderWidth:1.5,borderRadius:4,yAxisID:'y'},{type:'line',label:'Cresc.',data:gA,borderColor:Cv,borderWidth:2.5,pointBackgroundColor:Cv,pointRadius:5,tension:.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{y:{grid:GR,ticks:{...TK,callback:v=>v+'B'},title:{display:true,text:'USD Bi',color:'#7A8EA0',font:{size:11}}},y1:{position:'right',grid:{display:false},ticks:{...TK,callback:v=>v+'%'},title:{display:true,text:'Crescimento (%)',color:'#7A8EA0',font:{size:11}}},x:{grid:{display:false},ticks:TK}}}});
+  const iA=pA('inf'),irA=pA('ir');
+  ch('c-inf-juro',{data:{labels:anos,datasets:[{label:'Inflação',data:iA,borderColor:Cv,backgroundColor:CvA,fill:true,tension:.3,pointRadius:4,borderWidth:2},{label:'Juro',data:irA,borderColor:Co,borderDash:[5,3],borderWidth:2,pointRadius:4,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{y:{grid:GR,ticks:{...TK,callback:v=>v+'%'}},x:{grid:{display:false},ticks:TK}}}});
+  ch('c-cambio-g',{data:{labels:M.map(d=>d.y+' '+d.q),datasets:[{label:'AOA/USD',data:M.map(d=>d.fx),borderColor:Cs,backgroundColor:CsA,fill:true,tension:.3,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GR,ticks:TK},x:{grid:{display:false},ticks:{...TK,maxTicksLimit:7,autoSkip:true}}}}});
+}
+
+function pgInflacao(){
+  const lb=M.map(d=>d.y+' '+d.q),ia=M.map(d=>d.inf);
+  ch('c-inf-h',{data:{labels:lb,datasets:[{label:'Inflação',data:ia,borderColor:Cv,backgroundColor:'rgba(196,26,26,.07)',fill:true,tension:.3,pointRadius:3,borderWidth:2},{label:'MA4',data:ma4(ia),borderColor:Co,borderDash:[6,3],borderWidth:2,pointRadius:0,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{y:{grid:GR,ticks:{...TK,callback:v=>v+'%'}},x:{grid:{display:false},ticks:{...TK,maxTicksLimit:9,autoSkip:true}}}}});
+  const cP={2014:'#27AE60',2015:'#E74C3C',2016:'#E74C3C',2017:'#E74C3C',2018:'#3498DB',2019:'#3498DB',2020:'#E67E22',2021:'#E67E22',2022:'#9B59B6',2023:'#9B59B6',2024:'#9B59B6'};
+  ch('c-sc',{type:'bubble',data:{datasets:[{label:'Inf×Câmbio',data:M.map(d=>({x:d.fx,y:d.inf,r:5})),backgroundColor:M.map(d=>(cP[d.y]||'#888')+'99'),borderColor:M.map(d=>cP[d.y]||'#888'),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=M[ctx.dataIndex];return `${d.y} ${d.q}: AOA=${d.fx} | Inf=${d.inf}%`;} }}},scales:{x:{grid:GR,ticks:TK,title:{display:true,text:'Taxa de Câmbio (AOA/USD)',color:'#7A8EA0',font:{size:11}}},y:{grid:GR,ticks:{...TK,callback:v=>v+'%'},title:{display:true,text:'Inflação (%)',color:'#7A8EA0',font:{size:11}}}}}});
+  const t=document.getElementById('t-corr');if(!t)return;
+  const{rot,v}=CR;let h='<thead><tr><th></th>'+rot.map(r=>`<th style="white-space:nowrap;font-size:9.5px">${r}</th>`).join('')+'</tr></thead><tbody>';
+  v.forEach((row,i)=>{h+=`<tr><td>${rot[i]}</td>`;row.forEach((val,j)=>{const a=Math.abs(val);const bg=i===j?'transparent':val>0?`rgba(10,122,104,${a*.66})`:`rgba(196,26,26,${a*.66})`;const cor=a>.36&&i!==j?'white':'var(--tx)';h+=`<td style="background:${bg};color:${cor}">${val.toFixed(2)}</td>`;});h+='</tr>';});
+  t.innerHTML=h+'</tbody>';
+}
+
+function pgTrabalho(){
+  const ck=document.getElementById('f-comp')?.value||'inf';
+  const lbl={inf:'Inflação (%)',gr:'Crescimento PIB (%)',ir:'Taxa de Juro (%)'};
+  const unA=pA('un'),compA=pA(ck);
+  ch('c-trab',{data:{labels:anos,datasets:[{type:'bar',label:'Desemprego',data:unA,backgroundColor:CsA,borderColor:Cs,borderWidth:1.5,borderRadius:4,yAxisID:'y'},{type:'line',label:lbl[ck],data:compA,borderColor:Co,borderWidth:2.5,pointBackgroundColor:Co,pointRadius:5,tension:.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{y:{grid:GR,ticks:{...TK,callback:v=>v+'%'},title:{display:true,text:'Desemprego (%)',color:'#7A8EA0',font:{size:11}}},y1:{position:'right',grid:{display:false},ticks:{...TK,callback:v=>v+'%'},title:{display:true,text:lbl[ck],color:'#7A8EA0',font:{size:11}}},x:{grid:{display:false},ticks:TK}}}});
+  const jr=M.map(d=>+(d.ir-d.inf).toFixed(2));
+  ch('c-jr',{type:'bar',data:{labels:M.map(d=>d.y+' '+d.q),datasets:[{label:'Juro Real',data:jr,backgroundColor:jr.map(v=>v>=0?'rgba(10,122,104,.62)':'rgba(196,26,26,.62)'),borderColor:jr.map(v=>v>=0?Ct:Cv),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:GR,ticks:{...TK,callback:v=>v+'%'}},x:{grid:{display:false},ticks:{...TK,maxTicksLimit:9,autoSkip:true}}}}});
+  const oil=pA('oil'),noil=oil.map(v=>+(100-v).toFixed(1));
+  ch('c-pc',{data:{labels:anos,datasets:[{label:'Petrolífero',data:oil,backgroundColor:'rgba(184,134,10,.76)',borderColor:Co,borderWidth:1,borderRadius:4,stack:'s'},{label:'Não-Petrolífero',data:noil,backgroundColor:'rgba(10,122,104,.55)',borderColor:Ct,borderWidth:1,borderRadius:4,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:TK,stacked:true},y:{grid:GR,ticks:{...TK,callback:v=>v+'%'},stacked:true,max:100}}}});
+}
+
+function pgProvincias(){
+  const ord=document.getElementById('f-ord')?.value||'dev';
+  const reg=document.getElementById('f-reg')?.value||'t';
+  let d=[...P];if(reg!=='t')d=d.filter(p=>p.reg===reg);
+  const dO=[...d].sort((a,b)=>a.dev-b.dev);
+  ch('c-dev',{type:'bar',data:{labels:dO.map(x=>x.prov),datasets:[{label:'Índice',data:dO.map(x=>x.dev),backgroundColor:dO.map(x=>{const v=x.dev/100;return `rgba(${Math.round(196*(1-v)+10*v)},${Math.round(26*(1-v)+122*v)},${Math.round(26*(1-v)+104*v)},.82)`;  }),borderRadius:4,borderWidth:0}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Índice: ${c.raw.toFixed(1)} / 100`}}},scales:{x:{grid:GR,ticks:TK,max:100},y:{grid:{display:false},ticks:{...TK,font:{size:10.5}}}}}});
+  const cR={Norte:'#1D5FA6',Centro:'#3D52A0',Sul:'#C41A1A',Leste:'#B8860A'};
+  const grp={};P.forEach(p=>{(grp[p.reg]||(grp[p.reg]=[])).push(p);});
+  ch('c-bb',{type:'bubble',data:{datasets:Object.entries(grp).map(([r,pts])=>({label:r,data:pts.map(p=>({x:p.un,y:p.lit,r:Math.max(4,p.pop*2.4)})),backgroundColor:(cR[r]||'#888')+'55',borderColor:cR[r]||'#888',borderWidth:1.5}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const p=P.find(p=>Math.abs(p.un-ctx.parsed.x)<.01);return p?`${p.prov}: Desemp. ${p.un}% | Lit. ${p.lit}%`:'';} }}},scales:{x:{grid:GR,ticks:TK,title:{display:true,text:'Taxa de Desemprego (%)',color:'#7A8EA0',font:{size:11}},min:5,max:21},y:{grid:GR,ticks:TK,title:{display:true,text:'Taxa de Literacia (%)',color:'#7A8EA0',font:{size:11}},min:50,max:100}}}});
+  const mC={Norte:'rn',Centro:'rc',Sul:'rs',Leste:'rl'};
+  const dT=[...d].sort((a,b)=>(b[ord]??b.dev)-(a[ord]??a.dev));
+  const tb=document.getElementById('t-prov');if(!tb)return;
+  let h='<thead><tr><th>Província</th><th>Região</th><th>Pop. (M)</th><th>% PIB</th><th>Desemprego</th><th>Pobreza</th><th>Literacia</th><th>Electricidade</th><th>Índice Dev.</th></tr></thead><tbody>';
+  dT.forEach(p=>{h+=`<tr><td><strong>${p.prov}</strong></td><td><span class="rg ${mC[p.reg]||''}">${p.reg}</span></td><td>${p.pop.toFixed(3)}</td><td>${p.gdp}%</td><td>${p.un}%</td><td>${p.pov}%</td><td>${p.lit}%</td><td>${p.elec}%</td><td><div class="dw"><div class="db" style="width:${Math.round(p.dev*.78)}px"></div><span>${p.dev.toFixed(1)}</span></div></td></tr>`;});
+  tb.innerHTML=h+'</tbody>';
+}
+
+const pgs=document.querySelectorAll('.pg'),tabs=document.querySelectorAll('.tab'),feito={};
+function mostrar(id){
+  pgs.forEach(p=>p.classList.toggle('on',p.id==='pg-'+id));
+  tabs.forEach(t=>t.classList.toggle('on',t.dataset.pg===id));
+  if(!feito[id]){feito[id]=true;
+    if(id==='geral')     pgGeral();
+    if(id==='inflacao')  pgInflacao();
+    if(id==='trabalho')  pgTrabalho();
+    if(id==='provincias')pgProvincias();
+  }
+}
+tabs.forEach(t=>t.addEventListener('click',()=>mostrar(t.dataset.pg)));
+pgGeral();feito['geral']=true;
+document.getElementById('f-comp')?.addEventListener('change',()=>{if(feito['trabalho'])pgTrabalho();});
+document.getElementById('f-ord')?.addEventListener('change',()=>{if(feito['provincias'])pgProvincias();});
+document.getElementById('f-reg')?.addEventListener('change',()=>{if(feito['provincias'])pgProvincias();});
+</script>
+</body>
+</html>
