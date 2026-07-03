@@ -1,0 +1,33 @@
+# =============================================================
+#  netlify.toml — Dashboard de Indicadores Económicos — Angola
+#  Deploy automático a partir do repositório GitHub
+# =============================================================
+
+[build]
+  # Pasta publicada como raiz do site (sem build step necessário)
+  publish = "public"
+
+  # Sem comando de build — site estático puro
+  command = ""
+
+# ── Cabeçalhos de segurança e performance ───────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection       = "1; mode=block"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+# Cache longo para assets estáticos
+[[headers]]
+  for = "/visuals/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# ── Redirects ────────────────────────────────────────────────
+# SPA fallback — redireciona 404 para o dashboard principal
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
